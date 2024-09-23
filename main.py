@@ -32,11 +32,37 @@ def main():
     print(antwort)
     say(antwort)
 
-#Load Pictues
-orb = pygame.image.load("assets/orb.gif")
+frames = [pygame.image.load("assets/orb/frame_1.png"),
+          pygame.image.load("assets/orb/frame_1.png"),
+          pygame.image.load("assets/orb/frame_1.png"),
+          pygame.image.load("assets/orb/frame_1.png"),
+          pygame.image.load("assets/orb/frame_2.png"),
+          pygame.image.load("assets/orb/frame_2.png"),
+          pygame.image.load("assets/orb/frame_2.png"),
+          pygame.image.load("assets/orb/frame_2.png"),
+          pygame.image.load("assets/orb/frame_3.png"),
+          pygame.image.load("assets/orb/frame_3.png"),
+          pygame.image.load("assets/orb/frame_3.png"),
+          pygame.image.load("assets/orb/frame_3.png"),
+          pygame.image.load("assets/orb/frame_4.png"),
+          pygame.image.load("assets/orb/frame_4.png"),
+          pygame.image.load("assets/orb/frame_4.png"),
+          pygame.image.load("assets/orb/frame_4.png"),
+          pygame.image.load("assets/orb/frame_5.png"),
+          pygame.image.load("assets/orb/frame_5.png"),
+          pygame.image.load("assets/orb/frame_5.png"),
+          pygame.image.load("assets/orb/frame_5.png"),
+          pygame.image.load("assets/orb/frame_6.png"),
+          pygame.image.load("assets/orb/frame_6.png"),
+          pygame.image.load("assets/orb/frame_6.png"),
+          pygame.image.load("assets/orb/frame_6.png"),
+          pygame.image.load("assets/orb/frame_7.png"),
+          pygame.image.load("assets/orb/frame_7.png"),
+          pygame.image.load("assets/orb/frame_7.png"),
+          pygame.image.load("assets/orb/frame_7.png")
+          ]
 
-# Buttons
-recordbutton = utilitys.Button(20, 20, orb, 1)
+recordbutton = utilitys.AnimatedButton(20, 20, frames, scale=1)
 
 def GameLoop(clock, screen):
     global Make_Record
@@ -47,7 +73,7 @@ def GameLoop(clock, screen):
             if event.type == pygame.QUIT:
                 run = False
 
-        if recordbutton.draw(screen=screen):
+        if recordbutton.draw(screen):
             print("Run main")
             Make_Record = True
 
