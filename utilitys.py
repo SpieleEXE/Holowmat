@@ -81,6 +81,7 @@ class AnimatedText:
         self.speed = speed
         self.index = 0
         self.displayed_text = ""
+        self.complete_lines = []
 
         # Text in mehrere Zeilen aufteilen, nach jeweils 6 Wörtern
         self.lines = self.split_text_into_lines(self.text, 6)
@@ -99,30 +100,36 @@ class AnimatedText:
         return lines
 
     def update(self):
+        """ Fügt nach und nach Buchstaben zum angezeigten Text hinzu. """
         if self.index < len(self.text):
             self.displayed_text += self.text[self.index]
             self.index += 1
+
+        # Aktualisiere die komplett angezeigten Zeilen basierend auf dem aktuellen Text
+        self.complete_lines = self.split_text_into_lines(self.displayed_text, 6)
 
     def draw(self, screen):
         screen_width, screen_height = screen.get_size()
 
         # Berechne die Höhe des gesamten Textblocks
-        total_text_height = len(self.lines) * self.line_height
+        total_text_height = len(self.complete_lines) * self.line_height
 
         # Startposition der ersten Zeile so berechnen, dass der gesamte Textblock zentriert ist
         y = self.position[1] - total_text_height // 2
 
         # Jede Zeile separat rendern und horizontal zentrieren
-        for line in self.lines:
+        for line in self.complete_lines:
             text_surface = self.font.render(line, True, self.color)
             text_rect = text_surface.get_rect(center=(self.position[0], y))  # Horizontale Zentrierung
             screen.blit(text_surface, text_rect)
             y += self.line_height  # Position für nächste Zeile erhöhen
 
     def reset(self, new_text):
+        """ Setzt den Text und die Animation zurück. """
         self.text = new_text
         self.index = 0
         self.displayed_text = ""
+        self.complete_lines = []
 
         # Aktualisiere die Zeilen, nach jeweils 6 Wörtern
         self.lines = self.split_text_into_lines(new_text, 6)

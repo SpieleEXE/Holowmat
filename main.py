@@ -15,10 +15,12 @@ Audio = None
 
 font = None
 
-animated_text = utilitys.AnimatedText("Hallo \n Wie Geht es dir", font, (255, 255, 255), (960, 540), speed=1)
+animated_text = utilitys.AnimatedText("", font, (255, 255, 255), (960, 540), speed=2)
 
 def record():
+    animated_text.reset("Recording...")
     Text = Audio.text()
+    animated_text.reset("Loading...")
     return Text
 
 def say(text):
@@ -75,12 +77,16 @@ recordbutton = utilitys.AnimatedButton(20, 20, frames, scale=1)
 
 def GameLoop(clock, screen):
     global Make_Record
+    global Audio
     run = True
     while run:
         # Quit pygame
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+
+
+
         screen.fill((0, 0, 0))  # Bildschirm leeren
         # Aktualisiere den animierten Text
         animated_text.update()
