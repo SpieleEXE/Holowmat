@@ -13,6 +13,10 @@ tts_lock = threading.Lock()
 
 Audio = None
 
+font = None
+
+animated_text = utilitys.AnimatedText("Hallo \n Wie Geht es dir", font, (255, 255, 255), (960, 540), speed=1)
+
 def record():
     Text = Audio.text()
     return Text
@@ -24,13 +28,18 @@ def say(text):
     print("Played Audio")
 
 def main():
+    global animated_text  # Zugriff auf die animierte Textinstanz
     text = record()
     print(text)
     datatransfare.send_string(text, '127.0.0.1', 55555)
     antwort = datatransfare.receive_string(55554)
 
     print(antwort)
+    # Text an die animierte Textklasse übergeben und animieren
+    animated_text.reset(antwort)
+
     say(antwort)
+
 
 frames = [pygame.image.load("assets/orb/frame_1.png"),
           pygame.image.load("assets/orb/frame_1.png"),
@@ -72,6 +81,10 @@ def GameLoop(clock, screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        screen.fill((0, 0, 0))  # Bildschirm leeren
+        # Aktualisiere den animierten Text
+        animated_text.update()
+        animated_text.draw(screen)
 
         if recordbutton.draw(screen):
             print("Run main")
@@ -82,14 +95,16 @@ def GameLoop(clock, screen):
         clock.tick(60)
 
 def config_pygame():
+    global font
     pygame.init()
     screen = pygame.display.set_mode((1920, 1080))
     pygame.display.set_caption("Holowmat")
     clock = pygame.time.Clock()
     GameLoop(clock=clock, screen=screen)
 
+
 if __name__ == '__main__':
-    Audio = AudioToTextRecorder(model="large-v2", language="de")
+    Audio = AudioToTextRecorder(model="medium", language="de")
     pygame_thead = threading.Thread(target=config_pygame)
     pygame_thead.start()
     while True:
@@ -97,4 +112,3 @@ if __name__ == '__main__':
             print("Run in Main Thread")
             Make_Record = False
             main()
-    #pygame_thead.join()
