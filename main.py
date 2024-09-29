@@ -1,3 +1,4 @@
+import speech_recognition
 from RealtimeSTT import AudioToTextRecorder
 import pyttsx3
 import threading
@@ -18,10 +19,27 @@ font = None
 animated_text = utilitys.AnimatedText("", font, (255, 255, 255), (960, 540), speed=2)
 
 def record():
-    animated_text.reset("Recording...")
-    Text = Audio.text()
-    animated_text.reset("Loading...")
-    return Text
+    global recognizer
+    try:
+        with speech_recognition.Microphone() as mic:
+            animated_text.reset("Recording...")
+            recognizer.adjust_for_ambient_noise(mic, duration=0.2)
+            audio = recognizer.listen(mic)
+
+            text = recognizer.recognize_whisper(model="base", audio_data=audio, language='de')
+            text.lower()
+            print(text)
+            animated_text.reset("Loading...")
+    except speech_recognition.UnknownValueError:
+        animated_text.reset("Something went wrong. Please try it again")
+
+        recognizer = speech_recognition.Recognizer()
+
+
+
+
+
+    return text
 
 def say(text):
     # Say the antwort
@@ -110,7 +128,7 @@ def config_pygame():
 
 
 if __name__ == '__main__':
-    Audio = AudioToTextRecorder(model="medium", language="de")
+    recognizer = speech_recognition.Recognizer()
     pygame_thead = threading.Thread(target=config_pygame)
     pygame_thead.start()
     while True:
