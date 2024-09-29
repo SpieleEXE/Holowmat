@@ -26,7 +26,7 @@ def record():
             recognizer.adjust_for_ambient_noise(mic, duration=0.2)
             audio = recognizer.listen(mic)
 
-            text = recognizer.recognize_whisper(model="base", audio_data=audio, language='de')
+            text = recognizer.recognize_google(audio_data=audio, language="de_DE")
             text.lower()
             print(text)
             animated_text.reset("Loading...")
